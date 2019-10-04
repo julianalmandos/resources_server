@@ -21,15 +21,16 @@ app.use(function (req, res, next) {
 });
 
 app.get('/resources', function (req, res) {
-    var sql = "SELECT * FROM resources";
+    var sql = "SELECT * FROM resources res INNER JOIN categories cat ON (res.category=cat.id)";
     conn.query(sql, function (err, result) {
       if (err) throw err;
+      console.log(result);
       res.send(result);
     });
 });
 
 app.get('/resources/:search', function (req, res) {
-    var sql = "SELECT * FROM resources res WHERE res.title LIKE '%"+req.params.search+"%'";
+    var sql = "SELECT * FROM resources res INNER JOIN categories cat ON (res.category=cat.id) WHERE res.title LIKE '%"+req.params.search+"%'";
     conn.query(sql, function (err, result) {
       if (err) throw err;
       res.send(result);
