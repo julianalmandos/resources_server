@@ -20,8 +20,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.get('/resources', function (req, res) {
-    var sql = "SELECT * FROM resources res INNER JOIN categories cat ON (res.category=cat.id)";
+app.get('/api/resources', function (req, res) {
+    var sql = "SELECT * FROM resources res INNER JOIN categories cat ON (res.category=cat.id) WHERE res.deleted=0 ORDER BY res.id DESC";
     conn.query(sql, function (err, result) {
       if (err) throw err;
       console.log(result);
@@ -29,13 +29,30 @@ app.get('/resources', function (req, res) {
     });
 });
 
-app.get('/resources/:search', function (req, res) {
+app.get('/api/:entity', function (req, res) {
+  var sql = "SELECT * FROM "+req.params.entity;
+  conn.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log(result);
+    res.send(result);
+  });
+});
+
+/*app.get('/api/resources/:search', function (req, res) {
     var sql = "SELECT * FROM resources res INNER JOIN categories cat ON (res.category=cat.id) WHERE res.title LIKE '%"+req.params.search+"%'";
     conn.query(sql, function (err, result) {
       if (err) throw err;
       res.send(result);
     });
 });
+
+app.get('/api/resources/category/:category', function (req, res) {
+  var sql = "SELECT * FROM resources res INNER JOIN categories cat ON (res.category=cat.id) WHERE res.category="+req.params.category;
+  conn.query(sql, function (err, result) {
+    if (err) throw err;
+    res.send(result);
+  });
+});*/
 
 let port = process.env.PORT;
 if (port == null || port == "") {
