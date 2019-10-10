@@ -1,17 +1,21 @@
-var express = require('express');
-var app = express();
-var mysql = require('mysql');
+const express = require('express');
+const app = express();
+
+const Resource = require('./models/Resource');
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-var conn = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'resources'
-});
+db = require('./config/connection');
+
+db.authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -21,21 +25,11 @@ app.use(function (req, res, next) {
 });
 
 app.get('/api/resources', function (req, res) {
-    var sql = "SELECT * FROM resources res INNER JOIN categories cat ON (res.category=cat.id) WHERE res.deleted=0 ORDER BY res.id DESC";
-    conn.query(sql, function (err, result) {
-      if (err) throw err;
-      console.log(result);
-      res.send(result);
-    });
-});
-
-app.get('/api/:entity', function (req, res) {
-  var sql = "SELECT * FROM "+req.params.entity;
-  conn.query(sql, function (err, result) {
-    if (err) throw err;
-    console.log(result);
-    res.send(result);
-  });
+    Resource.findAll()
+      .then(resources => {
+        res.send(resources);
+      })
+      .catch(err => console.log(err));
 });
 
 /*app.get('/api/resources/:search', function (req, res) {
