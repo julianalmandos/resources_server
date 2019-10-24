@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 
 const Resource = require('./models/Resource');
+const Category = require('./models/Category');
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
@@ -30,6 +31,14 @@ app.get('/api/resources', function (req, res) {
         res.send(resources);
       })
       .catch(err => console.log(err));
+});
+
+app.get('/api/categories', function (req, res) {
+  Category.findAll()
+    .then(resources => {
+      res.send(resources);
+    })
+    .catch(err => console.log(err));
 });
 
 /*app.get('/api/resources/:search', function (req, res) {
