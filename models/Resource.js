@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../config/connection');
+const Category = require('./Category');
 
 const Resource = db.define('resource',{
   // attributes
@@ -28,10 +29,14 @@ const Resource = db.define('resource',{
     allowNull: false,
     field: 'created_at'
   },
-  category: {
+  categoryId: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    field: 'category'
+    field: 'category_id',
+    references: {
+      model: Category,
+      key: 'id',
+    }
   },
   deleted: {
     type: Sequelize.INTEGER,
@@ -40,5 +45,6 @@ const Resource = db.define('resource',{
     field: 'deleted'
   },
 });
+Resource.belongsTo(Category, {foreignKey: 'categoryId', as: 'category'});
 
 module.exports = Resource;

@@ -26,7 +26,7 @@ app.use(function (req, res, next) {
 });
 
 app.get('/api/resources', function (req, res) {
-    Resource.findAll()
+    Resource.findAll({include: ['category']})
       .then(resources => {
         res.send(resources);
       })

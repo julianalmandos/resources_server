@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../config/connection');
+const Resource = require('./Resource');
 
 const Category = db.define('category',{
   // attributes
