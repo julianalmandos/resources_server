@@ -26,7 +26,12 @@ app.use(function (req, res, next) {
 });
 
 app.get('/api/resources', function (req, res) {
-    Resource.findAll({include: ['category']})
+    Resource.findAll({
+      include: ['category'],
+      order: [
+        ['created_at','DESC']
+      ],
+    })
       .then(resources => {
         res.send(resources);
       })
