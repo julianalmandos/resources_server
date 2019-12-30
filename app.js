@@ -46,6 +46,16 @@ app.get('/api/categories', function (req, res) {
     .catch(err => console.log(err));
 });
 
+app.delete('/api/resources', function(req, res) {
+  Resource.destroy({
+    where: {
+      id: req.body.id
+    }
+  }).then(() => {
+    res.sendStatus(200);
+  });
+})
+
 /*app.get('/api/resources/:search', function (req, res) {
     var sql = "SELECT * FROM resources res INNER JOIN categories cat ON (res.category=cat.id) WHERE res.title LIKE '%"+req.params.search+"%'";
     conn.query(sql, function (err, result) {
