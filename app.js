@@ -46,6 +46,21 @@ app.get('/api/categories', function (req, res) {
     .catch(err => console.log(err));
 });
 
+app.post('/api/categories', function(req, res) {
+  console.log(req.body.data);
+  Category.create({
+    name: req.body.data.category.name,
+    color: req.body.data.category.color
+  })
+    .then(category => {
+      res.sendStatus(201);
+    })
+    .catch(err => {
+      console.log(err);
+      res.sendStatus(500);
+    })
+})
+
 app.delete('/api/resources', function(req, res) {
   Resource.destroy({
     where: {
