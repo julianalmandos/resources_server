@@ -4,6 +4,9 @@ const app = express();
 const Resource = require('./models/Resource');
 const Category = require('./models/Category');
 
+const ResourceController = require('./controllers/Resource');
+const CategoryController = require('./controllers/Category');
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -25,67 +28,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.get('/api/resources', function (req, res) {
-    Resource.findAll({
-      include: ['category'],
-      order: [
-        ['created_at','DESC']
-      ],
-    })
-      .then(resources => {
-        res.send(resources);
-      })
-      .catch(err => console.log(err));
-});
-
-app.get('/api/categories', function (req, res) {
-  Category.findAll()
-    .then(resources => {
-      res.send(resources);
-    })
-    .catch(err => console.log(err));
-});
-
-app.post('/api/categories', function(req, res) {
-  console.log(req.body.data);
-  Category.create({
-    name: req.body.data.category.name,
-    color: req.body.data.category.color
-  })
-    .then(category => {
-      res.sendStatus(201);
-    })
-    .catch(err => {
-      console.log(err);
-      res.sendStatus(500);
-    })
-})
-
-app.delete('/api/resources', function(req, res) {
-  Resource.destroy({
-    where: {
-      id: req.body.id
-    }
-  }).then(() => {
-    res.sendStatus(200);
-  });
-})
-
-/*app.get('/api/resources/:search', function (req, res) {
-    var sql = "SELECT * FROM resources res INNER JOIN categories cat ON (res.category=cat.id) WHERE res.title LIKE '%"+req.params.search+"%'";
-    conn.query(sql, function (err, result) {
-      if (err) throw err;
-      res.send(result);
-    });
-});
-
-app.get('/api/resources/category/:category', function (req, res) {
-  var sql = "SELECT * FROM resources res INNER JOIN categories cat ON (res.category=cat.id) WHERE res.category="+req.params.category;
-  conn.query(sql, function (err, result) {
-    if (err) throw err;
-    res.send(result);
-  });
-});*/
+app.use('/api/resources', ResourceController);
+app.use('/api/categories', CategoryController);
 
 let port = process.env.PORT;
 if (port == null || port == "") {
