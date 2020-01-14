@@ -45,6 +45,12 @@ const Resource = db.define('resource',{
     defaultValue: '0',
     field: 'deleted'
   },
+  favourite: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    defaultValue: '0',
+    field: 'favourite'
+  }
 });
 Resource.belongsTo(Category, {foreignKey: 'categoryId', as: 'category'});
 
