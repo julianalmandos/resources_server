@@ -50,6 +50,12 @@ const Resource = db.define('resource',{
     allowNull: false,
     defaultValue: '0',
     field: 'favourite'
+  },
+  workingOn: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    defaultValue: '0',
+    field: 'working_on'
   }
 });
 Resource.belongsTo(Category, {foreignKey: 'categoryId', as: 'category'});

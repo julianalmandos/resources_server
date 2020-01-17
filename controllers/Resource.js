@@ -61,4 +61,38 @@ app.put('/removeFromFavourites', function(req, res) {
         })
 })
 
+app.put('/addToWorkingOn', function(req, res) {
+    Resource.update({
+        workingOn: 1,
+    },{
+        where: {
+            id: req.body.data.resourceId
+        }
+    })
+        .then(category => {
+            res.sendStatus(201);
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        })
+})
+
+app.put('/removeFromWorkingOn', function(req, res) {
+    Resource.update({
+        workingOn: 0,
+    },{
+        where: {
+            id: req.body.data.resourceId
+        }
+    })
+        .then(category => {
+            res.sendStatus(201);
+        })
+        .catch(err => {
+            console.log(err);
+            res.sendStatus(500);
+        })
+})
+
 module.exports = app;
